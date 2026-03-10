@@ -1,0 +1,50 @@
+body{
+    background-color: yellow;
+}
+p{
+    font-size: 50pt;
+    color: green;
+}
+#topnav{
+    background-color: rgb(251, 109, 8);
+    text-align: center;
+    padding: 0px;
+    position: relative;
+    width: 100%;
+    padding-top: 0%;
+    position: 9px;
+    border: 0cap;
+
+}
+.box{
+    border: 0%;
+    padding: 0%;
+    position: 2px;
+}
+#topnav a{
+    padding-top: 0px;
+    margin: 15px;
+    font-size: 20pt;
+    position: 9px;
+}
+#bottomnav{
+    background-color: blueviolet;
+    text-align: center;
+    padding: 10px;
+    padding-bottom: 0%;
+    
+}
+#bottomnav a{
+    font-size: 20pt;
+    margin: 20px;
+
+    
+}
+#login{
+    text-align: center;
+
+}
+#c pre{
+    background-color: aqua;
+    
+}
