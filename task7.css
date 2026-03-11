@@ -1,12 +1,12 @@
 body{
     background-color: #f0f0f0;              /* HEX */
-    background-image: url(" ");
+    background-image: url(picture.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
 }
 
-/* Horizontal Menu */
+
 ul.menu{
     list-style-type: none;
     margin: 0;
@@ -63,9 +63,9 @@ th, td{
 }
 
 tr:nth-child(even){
-    background-color: #dddddd;              /* Zebra rows */
+    background-color: #dddddd;              
 }
 
 tr:hover{
-    background-color: lightblue;            /* Hover effect */
+    background-color: lightblue;           
 }
