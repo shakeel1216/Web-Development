@@ -1,0 +1,71 @@
+body{
+    background-color: #f0f0f0;              /* HEX */
+    background-image: url(picture.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+ul.menu{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(30,144,255);      /* RGB */
+    overflow: hidden;
+}
+
+ul.menu li{
+    float: left;
+}
+
+ul.menu li a{
+    display: block;
+    color: white;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+ul.menu li a:hover{
+    background-color: hsl(210, 80%, 40%);   /* HSL */
+}
+
+/* Box Example */
+.box{
+    width: 200px;
+    height: 120px;
+    min-width: 150px;
+    max-width: 250px;
+    background-color: rgba(255,0,0,0.5);    /* RGBA */
+    border: 3px solid black;
+    margin: 20px;
+    padding: 15px;
+    float: left;
+    box-shadow: 4px 4px 8px gray;           /* Bonus */
+}
+
+/* Clear float */
+.clear{
+    clear: both;
+}
+
+/* Styled Table */
+table{
+    width: 70%;
+    border-collapse: collapse;
+    margin: 20px;
+}
+
+th, td{
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even){
+    background-color: #dddddd;              
+}
+
+tr:hover{
+    background-color: lightblue;           
+}
