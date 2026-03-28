@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Management System</title>
+
+  <!-- jQuery CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    input {
+      margin: 5px;
+      padding: 5px;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+    .student {
+      background: #f2f2f2;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    form{
+        text-align: center;
+        background-color: #f2f2f2;
+    }
+  </style>
+</head>
+
+<body>
+
+
+<!-- Form -->
+<form id="studentForm">
+    <h2>Student Management System</h2>
+    <label for="Name">Name</label>
+  <input type="text" id="name" placeholder="Enter Name" required><br><br>
+  <label for="age">Age#</label>
+  <input type="number" id="age" placeholder="Enter Age" required><br><br>
+  <label for="course">Course</label>
+  <input type="text" id="course" placeholder="Enter Course" required><br><br>
+  <button type="submit">Add Student</button>
+</form>
+
+<hr>
+
+<h3>📋 Student List</h3>
+<div id="studentList"></div>
+<hr>
+
+<script>
+  // 🔹 Array to store students
+  let students = [];
+
+  // 🔹 Function: Display Students
+  function displayStudents() {
+    $("#studentList").empty();
+
+    students.forEach(function(student, index) {
+      $("#studentList").append(`
+        <div class="student">
+          <p><b>Name:</b> ${student.name}</p>
+          <p><b>Age:</b> ${student.age}</p>
+          <p><b>Course:</b> ${student.course}</p>
+          <button onclick="deleteStudent(${index})">Delete</button>
+        </div>
+      `);
+    });
+  }
+
+  // 🔹 Function: Add Student
+  function addStudent(name, age, course) {
+    let student = {
+      name: name,
+      age: age,
+      course: course
+    };
+
+    students.push(student);
+    displayStudents();
+  }
+
+  // 🔹 Function: Delete Student
+  function deleteStudent(index) {
+    students.splice(index, 1);
+    displayStudents();
+  }
+
+  // 🔹 jQuery Event: Form Submit
+  $("#studentForm").submit(function(e) {
+    e.preventDefault(); // prevent page reload
+
+    let name = $("#name").val();
+    let age = $("#age").val();
+    let course = $("#course").val();
+
+    addStudent(name, age, course);
+
+    // Clear form
+    $("#name").val("");
+    $("#age").val("");
+    $("#course").val("");
+  });
+
+</script>
+
+</body>
+</html>
