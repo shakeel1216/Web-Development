@@ -6,6 +6,8 @@
   <!-- jQuery CDN -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+  
+
   <style>
     body {
       font-family: Arial;
@@ -40,7 +42,7 @@
     <h2>Student Management System</h2>
     <label for="Name">Name</label>
   <input type="text" id="name" placeholder="Enter Name" required><br><br>
-  <label for="age">Age#</label>
+  <label for="age">Age</label>
   <input type="number" id="age" placeholder="Enter Age" required><br><br>
   <label for="course">Course</label>
   <input type="text" id="course" placeholder="Enter Course" required><br><br>
@@ -101,13 +103,15 @@
 
     addStudent(name, age, course);
 
-    // Clear form
+    
     $("#name").val("");
     $("#age").val("");
     $("#course").val("");
   });
 
 </script>
+
+
 
 </body>
 </html>
