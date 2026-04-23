@@ -1,0 +1,210 @@
+<?php
+session_start();
+
+/* ---------- DATABASE ---------- */
+$conn = new mysqli("localhost","root","","food_app");
+if($conn->connect_error) die("DB Error");
+
+/* ---------- FUNCTIONS ---------- */
+function calculateBill($items,$tax=0.05){
+    $total=0;
+    foreach($items as $item){
+        $total+=$item;
+    }
+    return $total+($total*$tax);
+}
+
+function applyDiscount($total,$isStudent){
+    if($total>=5000 && $isStudent){
+        $discount=0.20;
+    }elseif($total>=3000 || $isStudent){
+        $discount=0.10;
+    }elseif($total>=1000 xor $isStudent){
+        $discount=0.05;
+    }else{
+        $discount=0;
+    }
+
+    $final=($discount>0)? $total-($total*$discount):$total;
+    return [$final,$discount];
+}
+
+function orderType($type){
+    switch($type){
+        case "dinein": return "Dine-In 🍽️";
+        case "takeaway": return "Takeaway 🥡";
+        case "delivery": return "Delivery 🚚";
+        default: return "Invalid ❌";
+    }
+}
+
+/* ---------- AUTH ---------- */
+if(isset($_POST['register'])){
+    $name=$_POST['name'];
+    $email=$_POST['email'];
+    $pass=password_hash($_POST['password'],PASSWORD_DEFAULT);
+
+    $conn->query("INSERT INTO users(name,email,password)
+                  VALUES('$name','$email','$pass')");
+}
+
+if(isset($_POST['login'])){
+    $email=$_POST['email'];
+    $pass=$_POST['password'];
+
+    $res=$conn->query("SELECT * FROM users WHERE email='$email'");
+    $user=$res->fetch_assoc();
+
+    if($user && password_verify($pass,$user['password'])){
+        $_SESSION['user']=$user['id'];
+    }
+}
+
+if(isset($_GET['logout'])){
+    session_destroy();
+    header("Location:index.php");
+}
+
+/* ---------- ORDER ---------- */
+$result="";
+if(isset($_POST['order'])){
+    $items=$_POST['items'] ?? [];
+    $type=$_POST['type'];
+    $isStudent=isset($_POST['student']);
+
+    if(!(count($items)>0)){
+        $result="❌ No items selected";
+    }else{
+        $total=calculateBill($items);
+        list($final,$discount)=applyDiscount($total,$isStudent);
+
+        $result="
+        <p>Order Type: ".orderType($type)."</p>
+        <p>Total: Rs ".number_format($total,2)."</p>
+        <p>Discount: ".($discount*100)."%</p>
+        <h3>Final: Rs ".number_format($final,2)."</h3>";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Food App</title>
+
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(to right,#4facfe,#00f2fe);
+    margin:0;
+}
+.container{
+    width:400px;
+    margin:40px auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px gray;
+}
+h2{text-align:center;}
+input,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+}
+button{
+    width:100%;
+    padding:10px;
+    background:#28a745;
+    color:white;
+    border:none;
+}
+.menu label{
+    display:block;
+    text-align:left;
+}
+.result{
+    background:#e9ffe9;
+    padding:10px;
+    margin-top:10px;
+}
+</style>
+
+<script>
+// Simple JS validation
+function validateForm(){
+    let checkboxes=document.querySelectorAll("input[name='items[]']:checked");
+    if(checkboxes.length==0){
+        alert("Select at least one item!");
+        return false;
+    }
+    return true;
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🍔 Food Ordering System</h2>
+
+<?php if(!isset($_SESSION['user'])){ ?>
+
+<!-- LOGIN -->
+<form method="POST">
+<h3>Login</h3>
+<input type="email" name="email" placeholder="Email" required>
+<input type="password" name="password" placeholder="Password" required>
+<button name="login">Login</button>
+</form>
+
+<hr>
+
+<!-- REGISTER -->
+<form method="POST">
+<h3>Register</h3>
+<input type="text" name="name" placeholder="Name" required>
+<input type="email" name="email" required>
+<input type="password" name="password" required>
+<button name="register">Register</button>
+</form>
+
+<?php } else { ?>
+
+<a href="?logout=true">Logout</a>
+
+<form method="POST" onsubmit="return validateForm()">
+
+<h3>Select Food</h3>
+
+<div class="menu">
+<label><input type="checkbox" name="items[]" value="500"> Burger - 500</label>
+<label><input type="checkbox" name="items[]" value="800"> Pizza - 800</label>
+<label><input type="checkbox" name="items[]" value="300"> Fries - 300</label>
+<label><input type="checkbox" name="items[]" value="200"> Drink - 200</label>
+</div>
+
+<select name="type">
+<option value="dinein">Dine-In</option>
+<option value="takeaway">Takeaway</option>
+<option value="delivery">Delivery</option>
+</select>
+
+<label><input type="checkbox" name="student"> Student Discount</label>
+
+<button name="order">Place Order</button>
+
+</form>
+
+<div class="result">
+<?php echo $result; ?>
+</div>
+
+<?php } ?>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Form</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            text-align: center;
+        }
+
+        .container {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        input, select {
+            width: 80%;
+            padding: 10px;
+            margin: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            border: none;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            background: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>📋 Student Registration Form</h2>
+
+    <form id="studentForm">
+        <input type="text" id="name" placeholder="Enter Name"><br>
+
+        <input type="email" id="email" placeholder="Enter Email"><br>
+
+        <select id="gender">
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select><br>
+
+        <select id="course">
+            <option value="">Select Course</option>
+            <option>Web Development</option>
+            <option>AI</option>
+            <option>Data Science</option>
+        </select><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h3 id="message"></h3>
+
+    <h3>📊 Stored Data</h3>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Course</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+
+// Load data on page load
+document.addEventListener("DOMContentLoaded", loadData);
+
+document.getElementById("studentForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let gender = document.getElementById("gender").value;
+    let course = document.getElementById("course").value;
+
+    // Validation using logical operators
+    if(name === "" || email === "" || gender === "" || course === ""){
+        document.getElementById("message").innerHTML = "❌ All fields are required!";
+        return;
+    }
+
+    // Create object
+    let student = {
+        name: name,
+        email: email,
+        gender: gender,
+        course: course
+    };
+
+    // Get existing data
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+
+    // Store data
+    students.push(student);
+    localStorage.setItem("students", JSON.stringify(students));
+
+    document.getElementById("message").innerHTML = "✅ Data Saved Successfully!";
+
+    document.getElementById("studentForm").reset();
+
+    loadData();
+});
+
+// Load and display data
+function loadData(){
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let table = document.querySelector("#dataTable tbody");
+    table.innerHTML = "";
+
+    students.forEach(function(s){
+        let row = `<tr>
+            <td>${s.name}</td>
+            <td>${s.email}</td>
+            <td>${s.gender}</td>
+            <td>${s.course}</td>
+        </tr>`;
+        table.innerHTML += row;
+    });
+}
+
+</script>
+
+</body>
+</html>
